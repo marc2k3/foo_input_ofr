@@ -17,6 +17,7 @@ DECLARE_COMPONENT_VERSION(
 	"Free for non-commercial use. E-mail: FlorinGhido@yahoo.com"
 );
 
+VALIDATE_COMPONENT_FILENAME("foo_input_ofr.dll")
 DECLARE_FILE_TYPE("OptimFROG files", "*.ofr;*.ofs");
 
 struct foobar2000_reader_t
