@@ -90,7 +90,7 @@ public:
 
 	static GUID g_get_guid()
 	{
-		constexpr GUID g = { 0x47bf9957, 0xdbc, 0x4fe6, { 0xb2, 0x56, 0x8d, 0xe5, 0x26, 0x46, 0xbc, 0x9e } };
+		static constexpr GUID g = { 0x47bf9957, 0xdbc, 0x4fe6, { 0xb2, 0x56, 0x8d, 0xe5, 0x26, 0x46, 0xbc, 0x9e } };
 		return g;
 	}
 
@@ -165,16 +165,7 @@ public:
 
 	void get_info(file_info& info, abort_callback& abort)
 	{
-		if (m_reader.file->can_seek())
-		{
-			const auto pos = m_reader.file->get_position(abort);
-			try
-			{
-				tag_processor::read_trailing(m_reader.file, info, abort);
-			}
-			catch (...) {}
-			m_reader.file->seek(pos, abort);
-		}
+		get_meta(info, abort);
 
 		info.info_set("mode", m_info.method);
 		info.info_set("speedup", m_info.speedup);
@@ -230,6 +221,15 @@ public:
 	}
 
 private:
+	void get_meta(file_info& info, abort_callback& abort)
+	{
+		if (!m_reader.file->can_seek()) return;
+
+		const auto pos = m_reader.file->get_position(abort);
+		try { tag_processor::read_trailing(m_reader.file, info, abort); } catch (...) {}
+		m_reader.file->seek(pos, abort);
+	}
+
 	static constexpr int DELTA_POINTS = 1024;
 
 	OptimFROG_Info m_info{};
@@ -244,19 +244,19 @@ static input_cuesheet_factory_t<input_ofr> g_input_ofr_factory;
 class album_art_reader : public album_art_extractor_v2
 {
 public:
-	GUID get_guid()
+	GUID get_guid() final
 	{
 		return input_ofr::g_get_guid();
 	}
 
-	album_art_extractor_instance_ptr open(file_ptr filehint, const char* path, abort_callback& abort)
+	album_art_extractor_instance_ptr open(file_ptr filehint, const char* path, abort_callback& abort) final
 	{
 		file_ptr file(filehint);
 		if (file.is_empty()) filesystem::g_open_read(file, path, abort);
 		return tag_processor_album_art_utils::get()->open(file, abort);
 	}
 
-	bool is_our_path(const char* path, const char* extension)
+	bool is_our_path(const char* path, const char* extension) final
 	{
 		return input_ofr::g_is_our_path(path, extension);
 	}
@@ -265,19 +265,19 @@ public:
 class album_art_writer : public album_art_editor_v2
 {
 public:
-	GUID get_guid()
+	GUID get_guid() final
 	{
 		return input_ofr::g_get_guid();
 	}
 
-	album_art_editor_instance_ptr open(file_ptr filehint, const char* path, abort_callback& abort)
+	album_art_editor_instance_ptr open(file_ptr filehint, const char* path, abort_callback& abort) final
 	{
 		file_ptr file(filehint);
 		if (file.is_empty()) filesystem::g_open(file, path, filesystem::open_mode_write_existing, abort);
 		return tag_processor_album_art_utils::get()->edit(file, abort);
 	}
 
-	bool is_our_path(const char* path, const char* extension)
+	bool is_our_path(const char* path, const char* extension) final
 	{
 		return input_ofr::g_is_our_path(path, extension);
 	}
