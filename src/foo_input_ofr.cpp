@@ -11,7 +11,7 @@ namespace
 {
 	DECLARE_COMPONENT_VERSION(
 		"OptimFROG Lossless/DualStream Decoder",
-		"1.43",
+		"1.44",
 		"foobar2000 OptimFROG input plug-in\n"
 		"OptimFROG Lossless/DualStream audio DLL\n"
 		"Copyright (C) 1996-2011 Florin Ghido, all rights reserved.\n"
