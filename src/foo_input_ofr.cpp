@@ -1,5 +1,5 @@
 // foo_input_ofr.cpp contains an OptimFROG Lossless/DualStream audio
-// input plug-in for foobar2000 2.0 playback with cue sheet support
+// input plug-in for foobar2000 playback with cue sheet support
 
 // Copyright (C) 2005-2011 Florin Ghido
 
@@ -286,6 +286,6 @@ namespace
 		}
 	};
 
-	FB2K_SERVICE_FACTORY(AlbumArtEditor)
+	FB2K_SERVICE_FACTORY(AlbumArtEditor);
 	FB2K_SERVICE_FACTORY(AlbumArtExtractor);
 }
