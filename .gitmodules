@@ -1,0 +1,3 @@
+[submodule "foobar2000-sdk"]
+	path = foobar2000-sdk
+	url = https://github.com/jscript-panel/foobar2000-sdk
