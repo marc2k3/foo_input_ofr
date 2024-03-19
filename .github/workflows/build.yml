@@ -12,7 +12,7 @@ jobs:
     steps:
     - name: Clone repo
       run: |
-        git clone ${{ github.server_url }}/${{ github.repository }}
+        git clone --recurse ${{ github.server_url }}/${{ github.repository }}
 
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v2
